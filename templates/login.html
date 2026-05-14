@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="wrapper">
+    <div class="card">
+        <div class="logo-container">
+            <div class="logo-icon">F</div>
+            <div class="logo-text">Fin<span>Tech</span></div>
+        </div>
+
+        <h2>Bem-vindo de volta</h2>
+        <p class="subtitle">Acesse sua conta de gestão financeira</p>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-messages">
+                    {% for category, message in messages %}
+                        <div class="flash {{ category }}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        <form method="POST" action="/login">
+            <div class="form-group">
+                <label>E-mail</label>
+                <input type="email" name="email" placeholder="seu@email.com" required>
+            </div>
+            <div class="form-group">
+                <label>Senha</label>
+                <input type="password" name="password" placeholder="••••••••" required>
+            </div>
+            
+            <button type="submit" class="btn btn-primary" style="margin-top: 10px;">Entrar</button>
+            <a href="/register" class="btn btn-primary">Criar conta</a>
+        </form>
+
+        <div class="demo-text">
+            QA Team: Utilize os dados do plano de testes.
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+    .dash-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 30px; }
+    .info-card { background: var(--bg-card); padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); }
+    .info-card h3 { margin: 0 0 10px 0; font-size: 14px; color: var(--text-muted); text-transform: uppercase; }
+    .info-card .value { font-size: 28px; font-weight: bold; color: var(--text-main); }
+    .value.positive { color: var(--accent-green); }
+    .value.negative { color: var(--accent-red); }
+    
+    .transaction-form { display: grid; grid-template-columns: 1fr 1fr 2fr auto; gap: 10px; align-items: end; margin-bottom: 30px;}
+    
+    .list-group { list-style: none; padding: 0; margin: 0; }
+    .list-item { background: var(--bg-input); margin-bottom: 10px; padding: 15px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; border: 1px solid var(--border-color);}
+    .list-item .desc { font-weight: bold; }
+    .list-item .date { font-size: 12px; color: var(--text-muted); }
+    .list-item .amt.receita { color: var(--accent-green); font-weight: bold; }
+    .list-item .amt.despesa { color: var(--accent-red); font-weight: bold; }
+    .btn-sm { padding: 6px 12px; background: rgba(239, 68, 68, 0.1); border: 1px solid var(--accent-red); color: var(--accent-red); border-radius: 6px; cursor: pointer;}
+    .btn-sm:hover { background: var(--accent-red); color: white; }
+</style>
+
+<div class="dashboard-wrapper">
+    <div class="dash-header">
+        <div class="logo-container" style="margin: 0;">
+            <div class="logo-icon">F</div>
+            <div class="logo-text">Fin<span>Tech</span></div>
+        </div>
+        <a href="/logout" class="btn btn-primary" style="width: auto; margin: 0;">Sair da conta</a>
+    </div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="flash-messages">
+                {% for category, message in messages %}
+                    <div class="flash {{ category }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <div class="grid">
+        <div class="info-card">
+            <h3>Saldo Atual</h3>
+            <div class="value {% if saldo >= 0 %}positive{% else %}negative{% endif %}">
+                R$ {{ "%.2f"|format(saldo) }}
+            </div>
+        </div>
+        <div class="info-card">
+            <h3>Câmbio Atual</h3>
+            <p style="margin: 5px 0;">USD: <strong style="color: var(--accent-cyan)">R$ {{ "%.2f"|format(rates.USD) }}</strong></p>
+            <p style="margin: 0;">EUR: <strong style="color: var(--accent-cyan)">R$ {{ "%.2f"|format(rates.EUR) }}</strong></p>
+        </div>
+    </div>
+
+    <div class="card" style="padding: 25px;">
+        <h3>Nova Transação</h3>
+        <form action="/transaction" method="POST" class="transaction-form">
+            <div class="form-group" style="margin: 0;">
+                <label>Tipo</label>
+                <select name="type">
+                    <option value="receita">Receita (+)</option>
+                    <option value="despesa">Despesa (-)</option>
+                </select>
+            </div>
+            <div class="form-group" style="margin: 0;">
+                <label>Valor (R$)</label>
+                <input type="number" step="0.01" name="amount" placeholder="0.00" required>
+            </div>
+            <div class="form-group" style="margin: 0;">
+                <label>Descrição</label>
+                <input type="text" name="description" placeholder="Ex: Salário, Mercado..." required>
+            </div>
+            <button type="submit" class="btn btn-primary" style="margin: 0; background: var(--bg-input);">Adicionar</button>
+        </form>
+
+        <h3 style="margin-top: 30px;">Histórico de Transações</h3>
+        <ul class="list-group">
+            {% for t in transactions %}
+                <li class="list-item">
+                    <div>
+                        <div class="desc">{{ t[3] }}</div>
+                        <div class="date">{{ t[1]|capitalize }}</div>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 15px;">
+                        <span class="amt {{ t[1] }}">
+                            {% if t[1] == 'receita' %}+{% else %}-{% endif %} R$ {{ "%.2f"|format(t[2]) }}
+                        </span>
+                        <form action="/transaction/delete/{{ t[0] }}" method="post" style="margin: 0;">
+                            <button type="submit" class="btn-sm">Excluir</button>
+                        </form>
+                    </div>
+                </li>
+            {% else %}
+                <li class="list-item" style="justify-content: center; color: var(--text-muted);">
+                    Nenhuma transação registrada ainda.
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+{% endblock %}

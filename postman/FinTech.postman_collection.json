@@ -1,0 +1,362 @@
+{
+  "info": {
+    "_postman_id": "02b4c1aa-5337-4567-bdc7-e18b3bb01804",
+    "name": "FinTech",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "54815691",
+    "_collection_link": "https://go.postman.co/collection/54815691-02b4c1aa-5337-4567-bdc7-e18b3bb01804?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "1. Login Incorreto",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Retorna status 200 (Página carregada)\", function () {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"O sistema deve exibir mensagem de erro\", function () {\r",
+              "    pm.expect(pm.response.text()).to.include(\"Credenciais incorretas\");\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "",
+            "type": "text"
+          },
+          {
+            "key": "",
+            "value": "",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {
+              "key": "email",
+              "value": "rodrigo@admin.com",
+              "type": "text",
+              "uuid": "7f03c15f-ebed-44e0-87cc-d96c25795c8c"
+            },
+            {
+              "key": "password",
+              "value": "senhaerrada",
+              "type": "text",
+              "uuid": "32f14537-42f8-47c8-92bc-d4181a5e1abc"
+            }
+          ]
+        },
+        "url": {
+          "raw": "http://localhost:5000/login",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5000",
+          "path": [
+            "login"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "2. Cadastro E-mail Inválido",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"O sistema deve rejeitar o cadastro com flash message\", function () {\r",
+              "    pm.expect(pm.response.text()).to.include(\"E-mail\"); // Busca parte da palavra para evitar erro de acentuação (inválido)\r",
+              "    pm.expect(pm.response.text()).to.include(\"error\"); // Verifica se carregou a classe CSS de erro\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "",
+            "type": "text"
+          },
+          {
+            "key": "",
+            "value": "",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {
+              "key": "email",
+              "value": "qa_email_errado.com",
+              "type": "text",
+              "uuid": "7f03c15f-ebed-44e0-87cc-d96c25795c8c"
+            },
+            {
+              "key": "password",
+              "value": "123456",
+              "type": "text",
+              "uuid": "32f14537-42f8-47c8-92bc-d4181a5e1abc"
+            }
+          ]
+        },
+        "url": {
+          "raw": "http://localhost:5000/register",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5000",
+          "path": [
+            "register"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "3. Login Válido",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Redireciona e exibe o Dashboard com sucesso\", function () {\r",
+              "    // Como o Flask redireciona, o Postman segue e deve ler a tela de Dashboard\r",
+              "    pm.expect(pm.response.text()).to.include(\"Saldo Atual\");\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "",
+            "type": "text"
+          },
+          {
+            "key": "",
+            "value": "",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {
+              "key": "email",
+              "value": "rodrigo@admin.com",
+              "type": "text",
+              "uuid": "7f03c15f-ebed-44e0-87cc-d96c25795c8c"
+            },
+            {
+              "key": "password",
+              "value": "Rodrigo@2026",
+              "type": "text",
+              "uuid": "32f14537-42f8-47c8-92bc-d4181a5e1abc"
+            }
+          ]
+        },
+        "url": {
+          "raw": "http://localhost:5000/login",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5000",
+          "path": [
+            "login"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "4. Bloquear Valor Negativo",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"O sistema deve bloquear a operação com mensagem de erro\", function () {\r",
+              "    pm.expect(pm.response.text()).to.include(\"O valor n\"); // Parte do \"não pode ser negativo\"\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "",
+            "type": "text"
+          },
+          {
+            "key": "",
+            "value": "",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {
+              "key": "type",
+              "value": "despesa",
+              "type": "text",
+              "uuid": "7f03c15f-ebed-44e0-87cc-d96c25795c8c"
+            },
+            {
+              "key": "amount",
+              "value": "-100.00",
+              "type": "text",
+              "uuid": "32f14537-42f8-47c8-92bc-d4181a5e1abc"
+            },
+            {
+              "key": "description",
+              "value": "Teste Postman Negativo",
+              "type": "text",
+              "uuid": "bd51133f-195b-4470-97fa-ca0ba6e14a98"
+            }
+          ]
+        },
+        "url": {
+          "raw": "http://localhost:5000/transaction",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5000",
+          "path": [
+            "transaction"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "5. Salvar Receita Válida",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"O sistema deve salvar corretamente e exibir mensagem de sucesso\", function () {\r",
+              "    pm.expect(pm.response.text()).to.include(\"Transação adicionada com sucesso!\");\r",
+              "    pm.expect(pm.response.text()).to.include(\"Salário Postman\"); // Verifica se apareceu na lista\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "",
+            "type": "text"
+          },
+          {
+            "key": "",
+            "value": "",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "urlencoded",
+          "urlencoded": [
+            {
+              "key": "type",
+              "value": "receita",
+              "type": "text",
+              "uuid": "7f03c15f-ebed-44e0-87cc-d96c25795c8c"
+            },
+            {
+              "key": "amount",
+              "value": "2500.00",
+              "type": "text",
+              "uuid": "32f14537-42f8-47c8-92bc-d4181a5e1abc"
+            },
+            {
+              "key": "description",
+              "value": "Salário Postman",
+              "type": "text",
+              "uuid": "bd51133f-195b-4470-97fa-ca0ba6e14a98"
+            }
+          ]
+        },
+        "url": {
+          "raw": "http://localhost:5000/transaction",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "5000",
+          "path": [
+            "transaction"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
